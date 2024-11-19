@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="https://thymeleaf.org"
+        xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <!-- Meta tags Obrigatórias -->
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+            integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+            crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <title>Olá, mundo!</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="./venda.png" width="20" height="25" alt=""/>
+        </a>
+    </nav>
+    <a class="navbar-brand" href="#">Sistema de Vendas</a>
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#conteudoNavbarSuportado"
+            aria-controls="conteudoNavbarSuportado"
+            aria-expanded="false"
+            aria-label="Alterna navegação"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#"
+                >Home <span class="sr-only">(página atual)</span></a
+                >
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input
+                    class="form-control mr-sm-2"
+                    type="search"
+                    placeholder="Pesquisar"
+                    aria-label="Pesquisar"
+            />
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
+                Pesquisar
+            </button>
+        </form>
+    </div>
+</nav>
+
+<div class="container">
+    <form action="/salvarEntrada" th:object="${entrada}" method="POST">
+        <div class="form-group">
+
+            <label for="id">Id</label>
+            <input type="text" readonly="true" class="form-control" id="id" th:field="*{id}"/>
+
+
+            <label>Observação:</label>
+            <input type="text" required class="form-control" id="nome" th:field="*{obs}"/>
+            <!--            required serve para preencher o campo e nao deixar vazio-->
+
+            <label>Funcionário:</label>
+            <select th:field="*{funcionario}" class="form-control">
+                <option th:each="est: ${listaFuncionarios}" th:value="${est.id}" th:text="${est.nome}"></option>
+                <!--            esse listaFuncionarios esta vindo la do EntradaControle, na parte get cadastro-->
+            </select>
+
+            <label>Fornecedores:</label>
+            <select th:field="*{fornecedor}" class="form-control">
+                <option th:each="est: ${listaFornecedores}" th:value="${est.id}" th:text="${est.nome}"></option>
+                <!--            esse listaFornecedores esta vindo la do EntradaControle, na parte get cadastro-->
+            </select>
+
+            <label>Valor Total:</label>
+            <input type="text" readonly="readonly" class="form-control" th:field="*{valorTotal}"/>
+
+            <label>Quantidade Total:</label>
+            <input type="text" readonly="readonly" class="form-control" th:field="*{quantidadeTotal}"/>
+
+
+            <!--            aqui comeca o itemEntrada-->
+            <div class="form-row" th:object="${itemEntrada}">
+
+                <label>Produto:</label>
+                <select th:field="*{produto}" class="form-control">
+                    <option th:each="est: ${listaProdutos}" th:value="${est.id}" th:text="${est.nome}"></option>
+                    <!--            esse listaProdutos esta vindo la do EntradaControle, na parte get cadastro-->
+                </select>
+
+                <label>Quantidade:</label>
+                <input type="text"  class="form-control" th:field="*{quantidade}"/>
+
+                <label>Valor de Custo:</label>
+                <input type="text" class="form-control" th:field="*{valorCusto}"/>
+
+                <label>Valor de Venda:</label>
+                <input type="text" class="form-control" th:field="*{valor}"/>
+
+                <button name="acao" th:value="itens" type="submit" class="btn btn-primary">Adicionar</button>
+
+            </div>
+
+            <!--                Tabela com itens adicionados-->
+            <table class="table" id="tabela">
+
+                <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Produto</td>
+                    <td>Quantidade</td>
+                    <td>Valor Custo</td>
+                    <td>Valor Venda</td>
+                    <td>Ação</td>
+                </tr>
+                </thead>
+
+                <tbody>
+                <!--essa parte inferior esta sendo chamada la do entrada controle, conforme o listaItemEntrada e item entrada la passado-->
+                <tr th:each="itemEntrada: ${listaItemEntrada}">
+                    <td th:text="${itemEntrada.id}"></td>
+                    <td th:text="${itemEntrada.produto.nome}"></td>
+                    <td th:text="${itemEntrada.quantidade}"></td>
+                    <td th:text="${itemEntrada.valorCusto}"></td>
+                    <td th:text="${itemEntrada.valor}"></td>
+                    <td colspan="2">
+                        <a th:href="@{/editarItemEntrada/{id}(id=${itemEntrada.id})}"><i
+                                class="fa-solid fa-pen-to-square"
+                                style="color: blue"></i></a>
+                        <a th:href="@{/removerItemEntrada/{id}(id=${itemEntrada.id})}"><i class="fa-solid fa-trash"
+                                                                                          style="color: red;"></i></a>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+
+
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+        <a class="btn btn-danger" href="/administrativo"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
+        <a class="btn btn-success" href="/listarEntrada"><i class="fa-solid fa-table-list"></i> Listar</a>
+
+    </form>
+
+
+    <!-- JavaScript (Opcional) -->
+    <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"
+            integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function () {
+            $('#cep').mask('99999-999')
+        });
+    </script>
+
+</div>
+</body>
+</html>
