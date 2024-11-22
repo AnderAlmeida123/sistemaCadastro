@@ -1,0 +1,291 @@
+
+NA ENTRADAREPOSITORIO FORAM ADICIONADO PRODUTOREPOSITORIO, FUNCIONARIOREPOSITORIO E
+FORNECEDORREPOSITORIO, ONDE OS 3 SERAM SELECIONADOS NA TABELA PRINCIPAL DE ENTRADAREPOSITORIO
+PARA QUE A ENTRADA DO PRODUTO TENHA UM FORNECEDOR, O PRODUTO A SER ADICIONADO E O FUNCIONARIO.
+
+
+
+SEMPRE QUE FOR EDITAR AS PASTAS, INICIAR PELO MODELS (PARTE ONDE VC COLOCA OS DADOS COMO NOME CPF RUA CELULAR, LEMBRAR DE CRIAR OS GETTERS E SETTERS),
+ REPOSITORIO (ONDE FAZ A CONEXAO ENTRE MODELO E DB), DEPOIS CONTROLER (ONDE VC EDITAR O CRUD (GET, POST, PATCH, DELETE))
+
+A PASTA RESOURCES FAZ PARTE DO FRONT END, ONDE IMPRIME NA TELA O FRONT.
+
+se a pagina nao reenderizar, pode ser erro em alguma <td><td> do arquivo lista.html
+(coloquei cnpj na lista do html mas embaixo onde chama do backend estava cpf e deu erro)
+
+
+
+
+criar projeto java
+
+acessar start.spring.io
+
+project
+Maven
+
+language
+Java
+
+spring boot
+3.3.5 (essa parte ele se auto escolhe pela versao mais atual)
+
+Project Metada
+
+Group
+com.(nome do grupo do seu projeto)
+
+Artifact
+(nome do projeto)
+
+Description
+(descriçao do projeto, se quiser colocar)
+
+
+DEPENDENCIAS
+
+Spring boot devtools
+disponibiliza algumas ferramentas para projeto
+
+Spring Web
+é um framework que nos auxilia no desenvolvimento de aplicações web. Com ele, nós conseguimos ter facilidade e
+flexibilidade para trabalhar com requisições web
+
+Thymeleaf
+ferramenta que junta o front com os dados do backend, faz a reendirização.
+
+Spring data jpa
+faz interaçao com bancos de dados, e o hibernate faz as regras de integraçao
+
+Spring Security
+faz a segurança da aplicação
+
+Spring data jdbc
+ajuda a interagir com banco de dados
+
+PostgreSql driver
+driver do banco de dados que vai ser usado.
+
+clicar em GENERATE ao fim do projeto
+
+
+de primeira vez, deu erro na hora de rodar, e so ir em src>main>java>SistemaApplication.java
+e mudar o @SpringBootApplication e colocar @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
+que funcionou, lembra de importar.
+
+se pedir senha na pagina que tiver rodando servidor, utilizar SecurityAutoConfiguration.class em conjunto do mesmo exemplo acima.
+
+se aparecer error na config do banco de dados, usar JdbcTemplateAutoConfiguration.class isso = "Error creating bean with name 'jdbcMappingContext'"
+
+
+PARA UTILIZAR OS ICONES NO font-awesome DEVERA PROCURAR NO GOOGLE POR font-awesome 6 cdn E ADICIONAR DENTRO DO HEAD E LOGO EM SEGUIDA PROCURAR OS ICONES E COLOCAR ELE
+fontawesome.com
+
+
+usar o PROCURAR de uma tabela no JQUERI TABLE portugues
+PRIMEIRO passo, importar o cdn e colar na pagina html, no final da pagina onde estao os scripts. as 2 linhas, uma vc coloca no css no comeco do html (link)
+e o outro que e script no final da page.
+
+SEGUNDO passo, descer ate encontrar Initialising DataTables,
+
+<script>$(document).ready(function () {
+    $('#tabela').DataTable();
+});
+var table = new DataTable('#tabela', {
+    language: {
+        url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/pt-BR.json',
+    },
+});
+</script>
+
+
+CODIGO JA PRONTO. colocar em <table class="table" id="tabela"> o id como o nome para chamar o cod acima.
+
+
+required foi utilizado para por campos obrigatorios.
+
+
+
+esses scripts sao para padronizar o que vc esta chamando, cep, data, numero de cpf
+essas mascara nao deixa vc por outro tipo de dados. num campo de cpf nao tem como por letra e vice versa
+
+primeiramente importar o jquery mask
+https://cdnjs.com/libraries/jquery.mask
+
+importar ele la embaixo na parte de script, logo em seguida fazer os passos abaixo.
+
+importar esse script no final da pagina abaixo desse superior.
+https://igorescobar.github.io/jQuery-Mask-Plugin/docs.html
+abre um script no final da pagina de cadastro e utiliza esse codigo (usei para importar
+cep)
+<script>
+$(document).ready(function(){
+  $('#cep').mask('99999-999')
+});
+</script>
+
+codigo abaixo representar 1 linha (row) com 3 colunas (col-md) o md deixa responsivo.
+            <div class="row">
+                <div class="col-md"></div>
+                <div class="col-md"></div>
+                <div class="col-md"></div>
+            </div>
+
+
+
+FOI UTILIZADO ESSE ARQUIVO NA PARTE DA LISTA DO PRODUTO
+
+<script>$(document).ready(function () {
+    $('#tabela').DataTable();
+});
+var table = new DataTable('#tabela', {
+    language: {
+        decimal: ",",
+        thousands: ".",
+        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        infoEmpty: "Nenhum registro disponível",
+        infoFiltered: "(filtrado de _MAX_ registros totais)",
+        lengthMenu: "Mostrar _MENU_ registros",
+        loadingRecords: "Carregando...",
+        processing: "Processando...",
+        search: "Pesquisar:",
+        zeroRecords: "Nenhum registro encontrado",
+        paginate: {
+            first: "Primeiro",
+            last: "Último",
+            next: "Próximo",
+            previous: "Anterior"
+        }}
+});
+</script>
+
+POIS A CORREÇÃO ANTERIOR APRESENTAVA UM ERRO NA TELA DO HTML.
+
+
+DETALHES SOBRE A OPERAÇAO DE ENTRADACONTROLE
+
+ @PostMapping("/salvarEntrada")
+    public ModelAndView salvar(String acao, Entrada entrada, ItemEntrada itemEntrada, BindingResult result) {
+        if (result.hasErrors()) {
+            return cadastrar(entrada, itemEntrada);
+        }
+
+        if(acao.equals("itens")){
+            this.listaItemEntrada.add(itemEntrada);
+        }else if(acao.equals("salvar")){
+            entradaRepositorio.saveAndFlush(entrada);
+
+            for (ItemEntrada it: listaItemEntrada){
+                it.setEntrada(entrada);
+                itemEntradaRepositorio.saveAndFlush(itemEntrada);
+
+                Optional<Produto> prod = produtoRepositorio.findById(it.getProduto().getId());
+            Produto produto = prod.get();
+            produto.setEstoque(produto.getEstoque() + it.getQuantidade());
+            produto.setPrecoVenda(it.getValor());
+            produto.setPrecoCusto(it.getValorCusto());
+            produtoRepositorio.saveAndFlush(produto);
+
+            this.listaItemEntrada = new ArrayList<>();
+
+
+
+            }
+            return cadastrar(new Entrada(), new ItemEntrada());
+
+        }
+        return null;
+    }
+
+O ChatGPT disse:
+ChatGPT
+Vamos detalhar o que essa operação faz, passo a passo. Essa é uma implementação de um endpoint em um controlador Spring que realiza diferentes ações dependendo do valor do parâmetro acao. Aqui está a análise:
+
+1. Método e Mapeamento
+Anotação @PostMapping("/salvarEntrada"):
+Define que o método responde a requisições HTTP POST no caminho /salvarEntrada.
+Assinatura do método:
+Recebe os parâmetros:
+String acao: Define a ação a ser realizada ("itens" ou "salvar").
+Entrada entrada: Representa uma entidade de entrada (provavelmente relacionada a um processo de entrada de mercadorias).
+ItemEntrada itemEntrada: Representa itens relacionados à entrada.
+BindingResult result: Valida erros no formulário.
+2. Verificação de Erros
+java
+Copiar código
+if (result.hasErrors()) {
+    return cadastrar(entrada, itemEntrada);
+}
+Caso o objeto entrada ou itemEntrada tenha erros de validação, o método redireciona para o método cadastrar, retornando o formulário com os dados já preenchidos.
+3. Ação para "itens"
+java
+Copiar código
+if(acao.equals("itens")){
+    this.listaItemEntrada.add(itemEntrada);
+}
+Caso o parâmetro acao seja "itens":
+O item itemEntrada é adicionado a uma lista chamada listaItemEntrada. Essa lista é provavelmente usada para acumular itens antes de salvar uma entrada completa.
+4. Ação para "salvar"
+java
+Copiar código
+else if(acao.equals("salvar")){
+    entradaRepositorio.saveAndFlush(entrada);
+Quando a ação é "salvar", a lógica é mais complexa:
+Salvar a entrada principal:
+A entidade entrada é salva no banco de dados usando o repositório entradaRepositorio. O método saveAndFlush garante que a transação seja imediatamente sincronizada com o banco.
+5. Iteração pelos Itens
+java
+Copiar código
+for (ItemEntrada it: listaItemEntrada) {
+    it.setEntrada(entrada);
+    itemEntradaRepositorio.saveAndFlush(itemEntrada);
+Cada item na lista listaItemEntrada é processado:
+Associação do item com a entrada:
+Define a propriedade entrada no item it para referenciar a entrada salva.
+Salvar o item no banco de dados:
+O item é salvo no repositório itemEntradaRepositorio.
+6. Atualização do Produto
+java
+Copiar código
+Optional<Produto> prod = produtoRepositorio.findById(it.getProduto().getId());
+Produto produto = prod.get();
+produto.setEstoque(produto.getEstoque() + it.getQuantidade());
+produto.setPrecoVenda(it.getValor());
+produto.setPrecoCusto(it.getValorCusto());
+produtoRepositorio.saveAndFlush(produto);
+Busca do produto associado ao item:
+O método findById localiza o produto associado ao item atual usando o ID do produto.
+Atualização dos dados do produto:
+O estoque do produto é incrementado com a quantidade do item.
+O preço de venda e o custo do produto são atualizados.
+Salvar o produto atualizado:
+O repositório produtoRepositorio salva as alterações no produto.
+7. Limpeza e Redirecionamento
+java
+Copiar código
+this.listaItemEntrada = new ArrayList<>();
+return cadastrar(new Entrada(), new ItemEntrada());
+Após salvar todos os itens:
+A lista listaItemEntrada é reinicializada para uma nova lista vazia.
+Um novo formulário é carregado com objetos vazios (Entrada e ItemEntrada).
+8. Retorno Nulo
+java
+Copiar código
+return null;
+Caso nenhuma das condições acima seja atendida (o que não deveria acontecer, já que acao deve ser "itens" ou "salvar"), o método retorna null.
+Resumo
+Este método realiza duas ações principais:
+
+Adicionar itens à lista (acao = "itens") sem persistência no banco.
+Salvar a entrada e seus itens no banco (acao = "salvar") e atualizar os dados do produto, incluindo estoque e preços.
+Melhorias Possíveis
+Validação do parâmetro acao:
+Garantir que só valores esperados sejam permitidos para evitar cenários imprevistos.
+Tratamento de exceções:
+Adicionar blocos try-catch para gerenciar erros durante as operações de banco.
+Evitar inconsistência de dados:
+A lógica atual para salvar itemEntrada parece usar um objeto global listaItemEntrada. Pode ser interessante refatorar para evitar problemas de concorrência.
+Se precisar de mais detalhes ou dúvidas, só avisar!
+
+
+
+

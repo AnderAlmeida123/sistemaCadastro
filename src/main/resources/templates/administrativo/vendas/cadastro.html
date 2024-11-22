@@ -69,20 +69,20 @@
 </nav>
 
 <div class="container">
-    <form action="/salvarEntrada" th:object="${entrada}" method="POST">
+    <form action="/salvarVenda" th:object="${venda}" method="POST">
         <div class="form-group">
 
-            <!--            aqui comeca o itemEntrada-->
+            <!--            aqui comeca o itemVenda-->
 
 
             <!--            Menu superior               -->
 
-            <div class="row" th:object="${itemEntrada}">
+            <div class="row" th:object="${itemVenda}">
                 <div class="col-6">
                     <label>Produto:</label>
                     <select th:field="*{produto}" class="form-control">
                         <option th:each="est: ${listaProdutos}" th:value="${est.id}" th:text="${est.nome}"></option>
-                        <!--            esse listaProdutos esta vindo la do EntradaControle, na parte get cadastro-->
+                        <!--            esse listaProdutos esta vindo la do VendaControle, na parte get cadastro-->
                     </select>
 
                 </div>
@@ -91,16 +91,11 @@
                     <input type="text" class="form-control" th:field="*{quantidade}"/>
 
                 </div>
-                <div class="col">
-                    <label>Valor de Custo:</label>
-                    <input type="text" class="form-control" th:field="*{valorCusto}"/>
+<!--                <div class="col">-->
+<!--                    <label>Valor de Venda:</label>-->
+<!--                    <input type="text" class="form-control" th:field="*{valor}"/>-->
 
-                </div>
-                <div class="col">
-                    <label>Valor de Venda:</label>
-                    <input type="text" class="form-control" th:field="*{valor}"/>
-
-                </div>
+<!--                </div>-->
                 <div class="col">
                     <button name="acao" th:value="itens" style="margin-top: 30px" type="submit" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i>
                         Adicionar
@@ -125,13 +120,13 @@
                     <label>Funcionário:</label>
                     <select th:field="*{funcionario}" class="form-control">
                         <option th:each="est: ${listaFuncionarios}" th:value="${est.id}" th:text="${est.nome}"></option>
-                        <!--            esse listaFuncionarios esta vindo la do EntradaControle, na parte get cadastro-->
+                        <!--            esse listaFuncionarios esta vindo la do VendaControle, na parte get cadastro-->
                     </select>
 
-                    <label>Fornecedores:</label>
-                    <select th:field="*{fornecedor}" class="form-control">
-                        <option th:each="est: ${listaFornecedores}" th:value="${est.id}" th:text="${est.nome}"></option>
-                        <!--            esse listaFornecedores esta vindo la do EntradaControle, na parte get cadastro-->
+                    <label>Clientes:</label>
+                    <select th:field="*{cliente}" class="form-control">
+                        <option th:each="est: ${listaClientes}" th:value="${est.id}" th:text="${est.nome}"></option>
+                        <!--            esse listaClientes esta vindo la do VendaControle, na parte get cadastro-->
                     </select>
 
                     <label>Quantidade Total:</label>
@@ -146,7 +141,7 @@
                         Salvar
                     </button>
                     <a class="btn btn-danger" href="/administrativo"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
-                    <a class="btn btn-success" href="/listarEntrada"><i class="fa-solid fa-table-list"></i> Listar</a>
+                    <a class="btn btn-success" href="/listarVenda"><i class="fa-solid fa-table-list"></i> Listar</a>
 
 
                 </div>
@@ -161,25 +156,25 @@
                             <td>ID</td>
                             <td>Produto</td>
                             <td>Quantidade</td>
-                            <td>Valor Custo</td>
-                            <td>Valor Venda</td>
+                            <td>Valor Unitário</td>
+                            <td>Subtotal</td>
                             <td>Ação</td>
                         </tr>
                         </thead>
 
                         <tbody>
-                        <!--essa parte inferior esta sendo chamada la do entrada controle, conforme o listaItemEntrada e item entrada la passado-->
-                        <tr th:each="itemEntrada: ${listaItemEntrada}">
-                            <td th:text="${itemEntrada.id}"></td>
-                            <td th:text="${itemEntrada.produto.nome}"></td>
-                            <td th:text="${itemEntrada.quantidade}"></td>
-                            <td th:text="${itemEntrada.valorCusto}"></td>
-                            <td th:text="${itemEntrada.valor}"></td>
+                        <!--essa parte inferior esta sendo chamada la do venda controle, conforme o listaItemVenda e item venda la passado-->
+                        <tr th:each="itemVenda: ${listaItemVenda}">
+                            <td th:text="${itemVenda.id}"></td>
+                            <td th:text="${itemVenda.produto.nome}"></td>
+                            <td th:text="${itemVenda.quantidade}"></td>
+                            <td th:text="${itemVenda.valor}"></td>
+                            <td th:text="${itemVenda.subtotal}"></td>
                             <td colspan="2">
-                                <a th:href="@{/editarItemEntrada/{id}(id=${itemEntrada.id})}"><i
+                                <a th:href="@{/editarItemVenda/{id}(id=${itemVenda.id})}"><i
                                         class="fa-solid fa-pen-to-square"
                                         style="color: blue"></i></a>
-                                <a th:href="@{/removerItemEntrada/{id}(id=${itemEntrada.id})}"><i
+                                <a th:href="@{/removerItemVenda/{id}(id=${itemVenda.id})}"><i
                                         class="fa-solid fa-trash"
                                         style="color: red;"></i></a>
                             </td>

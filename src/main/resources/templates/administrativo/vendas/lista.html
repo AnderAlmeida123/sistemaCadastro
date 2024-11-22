@@ -78,25 +78,25 @@
         <thead>
         <tr>
             <td>Id</td>
-            <td>Nome Fornecedor</td>
-            <td>Nome Funcionario</td>
-            <td>Data de Entrada</td>
+            <td>Nome do Cliente</td>
+            <td>Nome do Funcionario</td>
+            <td>Data de Venda</td>
             <td>Valor Total </td>
             <td>Ação</td>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="entrada: ${listaEntrada}">
-            <td th:text="${entrada.id}"></td>
-            <td th:text="${entrada.fornecedor.nome}"></td>
-            <td th:text="${entrada.funcionario.nome}"></td>
-            <td th:text="${entrada.dataEntrada}"></td>
-            <td th:text="${entrada.valorTotal}"></td>
+        <tr th:each="venda: ${listaVenda}">
+            <td th:text="${venda.id}"></td>
+            <td th:text="${venda.cliente.nome}"></td>
+            <td th:text="${venda.funcionario.nome}"></td>
+            <td th:text="${venda.dataVenda}"></td>
+            <td th:text="${venda.valorTotal}"></td>
             <td colspan="2">
-                <a th:href="@{/editarEntrada/{id}(id=${entrada.id})}"><i class="fa-solid fa-pen-to-square"
+                <a th:href="@{/editarVenda/{id}(id=${venda.id})}"><i class="fa-solid fa-pen-to-square"
                                                                        style="color: blue"></i></a>
-                <a th:href="@{/removerEntrada/{id}(id=${entrada.id})}"><i class="fa-solid fa-trash"
+                <a th:href="@{/removerVenda/{id}(id=${venda.id})}"><i class="fa-solid fa-trash"
                                                                         style="color: red;"></i></a>
             </td>
         </tr>
@@ -105,7 +105,7 @@
     </table>
 
     <a class="btn btn-danger" href="/administrativo"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
-    <a class="btn btn-primary" href="/cadastroEntrada"><i class="fa-solid fa-address-card" style="color: white"></i>
+    <a class="btn btn-primary" href="/cadastroVenda"><i class="fa-solid fa-address-card" style="color: white"></i>
         Cadastrar</a>
 
 </div>

@@ -3,6 +3,7 @@ package com.projeto.sistema.controller;
 
 import com.projeto.sistema.models.Entrada;
 import com.projeto.sistema.models.ItemEntrada;
+import com.projeto.sistema.models.Produto;
 import com.projeto.sistema.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,19 +59,41 @@ public class EntradaControle {
 
         if(acao.equals("itens")){
             this.listaItemEntrada.add(itemEntrada);
+            entrada.setValorTotal(entrada.getValorTotal() + (itemEntrada.getValor() * itemEntrada.getQuantidade()));
+            entrada.setQuantidadeTotal(entrada.getQuantidadeTotal()+ itemEntrada.getQuantidade());
+
+        }else if(acao.equals("salvar")){
+            entradaRepositorio.saveAndFlush(entrada);
+
+            for (ItemEntrada it: listaItemEntrada){
+                it.setEntrada(entrada);
+                itemEntradaRepositorio.saveAndFlush(it);
+
+                Optional<Produto> prod = produtoRepositorio.findById(it.getProduto().getId());
+            Produto produto = prod.get();
+            produto.setEstoque(produto.getEstoque() + it.getQuantidade());
+            produto.setPrecoVenda(it.getValor());
+            produto.setPrecoCusto(it.getValorCusto());
+            produtoRepositorio.saveAndFlush(produto);
+
+            this.listaItemEntrada = new ArrayList<>();
+
+
+
+            }
+            return cadastrar(new Entrada(), new ItemEntrada());
+
         }
-
-        entradaRepositorio.saveAndFlush(entrada);
-
-        return cadastrar(new Entrada(), new ItemEntrada());
+        return cadastrar(entrada, new ItemEntrada());
     }
 
 
-//    @GetMapping("/editarEntrada/{id}")
-//    public ModelAndView editar(@PathVariable("id") Long id) {
-//        Optional<Entrada> entrada = entradaRepositorio.findById(id);
-//        return cadastrar(entrada.get());
-//    }
+    @GetMapping("/editarEntrada/{id}")
+    public ModelAndView editar(@PathVariable("id") Long id) {
+        Optional<Entrada> entrada = entradaRepositorio.findById(id);
+       this.listaItemEntrada = itemEntradaRepositorio.buscarPorEntrada(id);
+        return cadastrar(entrada.get(), new ItemEntrada());
+    }
 
 
     @GetMapping("/listarEntrada")
