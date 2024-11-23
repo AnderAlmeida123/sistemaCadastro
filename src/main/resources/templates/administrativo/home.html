@@ -13,118 +13,131 @@
           integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-    <title>Olá, mundo!</title>
+    <style>
+        .dropdown-menu-dark {
+            background-color: blue; /* Cor escura */
+            color: #fff; /* Texto branco */
+        }
+
+        .dropdown-menu-dark .dropdown-item {
+            color: #fff; /* Cor dos itens */
+        }
+
+        .dropdown-menu-dark .dropdown-item:hover {
+            background-color: lightblue; /* Cor de fundo ao passar o mouse */
+            color: black;
+        }
+    </style>
+
+    <title>Sistema de Venda!</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            <img src="./venda.png" width="20" height="25" alt=""/>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <div class="container">
+        <!-- Logo e Título -->
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <div class="d-flex align-items-center">
+                <!-- Logo -->
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr6yBc0QQ1CCxo4CnFnx2FS49M24saWf5u5g&s"
+                     alt="Logo" width="40" height="40" class="rounded-circle">
+                <!-- Título -->
+                <span class="ms-3 text-white font-weight-bold">Sistema de Vendas</span>
+            </div>
         </a>
-    </nav>
-    <a class="navbar-brand" href="#">Sistema de Vendas</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#conteudoNavbarSuportado" aria-controls="conteudoNavbarSuportado"
-            aria-expanded="false" aria-label="Alterna navegação">
-        <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(página atual)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar"/>
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Pesquisar</button>
-        </form>
+        <!-- Botão para mobile -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarContent" aria-controls="navbarContent"
+                aria-expanded="false" aria-label="Alterna navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Itens do menu -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-info-circle"></i> Sobre
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-address-book"></i> Contato
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
+
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <ul class="list-group" style="margin-top: 10px">
-                <li class="list-group-item active"><i class="fa-solid fa-gears"></i> Funcionalidades</li>
+            <!-- Dropdown Funcionalidades -->
+            <div class="dropdown" style="margin-top: 10px">
+                <button class="btn btn-primary dropdown-toggle dropdown-toggle-split w-100" id="funcionalidadesMenu"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-gears"></i> Funcionalidades
+                </button>
+                <div class="dropdown-menu dropdown-menu-dark w-100" aria-labelledby="funcionalidadesMenu">
+                    <a class="dropdown-item" href="/cadastroVenda">Efetuar Saida de Vendas</a>
+                    <a class="dropdown-item" href="/listarVenda">Listar Saida de Vendas</a>
+                    <a class="dropdown-item" href="/cadastroEntrada">Efetuar Entrada de Produtos</a>
+                    <a class="dropdown-item" href="/listarEntrada">Listar Entrada de Produtos</a>
+                </div>
+            </div>
 
-                <a href="/cadastroVenda">
-                    <li class="list-group-item">Efetuar Vendas</li>
-                </a>
+            <!-- Dropdown Cadastros -->
+            <div class="dropdown" style="margin-top: 10px">
+                <button class="btn btn-primary dropdown-toggle dropdown-toggle-split w-100" type="button"
+                        id="cadastrosMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-square-plus"></i> Cadastros
+                </button>
+                <div class="dropdown-menu dropdown-menu-dark w-100" aria-labelledby="cadastrosMenu">
+                    <a class="dropdown-item" href="/cadastroEstado">Cadastro Estado</a>
+                    <a class="dropdown-item" href="/cadastroCidade">Cadastro Cidade</a>
+                    <a class="dropdown-item" href="/cadastroFuncionario">Cadastro Funcionario</a>
+                    <a class="dropdown-item" href="/cadastroCliente">Cadastro Cliente</a>
+                    <a class="dropdown-item" href="/cadastroFornecedor">Cadastro Fornecedor</a>
+                    <a class="dropdown-item" href="/cadastroProduto">Cadastro Produto</a>
+                </div>
+            </div>
 
-                <a href="/listarVenda">
-                    <li class="list-group-item">Listar Vendas</li>
-                </a>
-
-                <a href="/cadastroEntrada">
-                    <li class="list-group-item">Efetuar entrada de Produtos</li>
-                </a>
-
-                <a href="/listarEntrada">
-                    <li class="list-group-item">Listar Entrada de Produtos</li>
-                </a>
-
-                <li class="list-group-item active"><i class="fa-solid fa-square-plus"></i> Cadastros</li>
-
-                <a href="/cadastroEstado">
-                    <li class="list-group-item">Cadastro Estado</li>
-                </a>
-
-                <a href="/cadastroCidade">
-                    <li class="list-group-item">Cadastro Cidade</li>
-                </a>
-
-                <a href="/cadastroFuncionario">
-                    <li class="list-group-item">Cadastro Funcionario</li>
-                </a>
-
-                <a href="/cadastroCliente">
-                    <li class="list-group-item">Cadastro Cliente</li>
-                </a>
-
-                <a href="/cadastroFornecedor">
-                    <li class="list-group-item">Cadastro Fornecedor</li>
-                </a>
-
-                <a href="/cadastroProduto">
-                    <li class="list-group-item">Cadastro Produto</li>
-                </a>
-
-                <li class="list-group-item active"><i class="fa-solid fa-list"></i> Listas</li>
-
-                <a href="/listarEstado">
-                    <li class="list-group-item">Listar Estado</li>
-                </a>
-
-                <a href="/listarCidade">
-                    <li class="list-group-item">Listar Cidade</li>
-                </a>
-
-                <a href="/listarFuncionario">
-                    <li class="list-group-item">Listar Funcionario</li>
-                </a>
-
-                <a href="/listarCliente">
-                    <li class="list-group-item">Listar Cliente</li>
-                </a>
-
-                <a href="/listarFornecedor">
-                    <li class="list-group-item">Listar Fornecedor</li>
-                </a>
-
-                <a href="/listarProduto">
-                    <li class="list-group-item">Listar Produto</li>
-                </a>
-            </ul>
+            <!-- Dropdown Listas -->
+            <div class="dropdown" style="margin-top: 10px">
+                <button class="btn btn-primary dropdown-toggle dropdown-toggle-split w-100" type="button"
+                        id="listasMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-list"></i> Listas
+                </button>
+                <div class="dropdown-menu dropdown-menu-dark w-100" aria-labelledby="listasMenu">
+                    <a class="dropdown-item" href="/listarEstado">Listar Estado</a>
+                    <a class="dropdown-item" href="/listarCidade">Listar Cidade</a>
+                    <a class="dropdown-item" href="/listarFuncionario">Listar Funcionario</a>
+                    <a class="dropdown-item" href="/listarCliente">Listar Cliente</a>
+                    <a class="dropdown-item" href="/listarFornecedor">Listar Fornecedor</a>
+                    <a class="dropdown-item" href="/listarProduto">Listar Produto</a>
+                </div>
+            </div>
         </div>
-
         <div class="col-9">
-            <h1>Bem-vindo ao sistema de vendas</h1>
-            <p>Sistema de vendas online Almeida</p>
-            <p>@Feito por Ander Almeida</p>
+            <div class="card shadow mt-4">
+                <div class="card-body text-center">
+                    <h1 class="card-title text-primary">Bem-vindo ao Sistema de Vendas</h1>
+                    <p class="card-text text-muted">Sistema de vendas online Almeida</p>
+                    <p class="card-text text-secondary">
+                        <i class="fa-solid fa-code"></i> @Feito por Ander Almeida
+                    </p>
+                    <a href="#" class="btn btn-primary mt-3">
+                        <i class="fa-solid fa-arrow-right"></i> Saiba Mais
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

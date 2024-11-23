@@ -92,7 +92,7 @@ public class VendaControle {
     }
 
 
-        @GetMapping("/editarVenda/{id}")
+    @GetMapping("/editarVenda/{id}")
     public ModelAndView editar(@PathVariable("id") Long id) {
         Optional<Venda> venda = vendaRepositorio.findById(id);
         this.listaItemVenda = itemVendaRepositorio.buscarPorVenda(id);
@@ -114,6 +114,32 @@ public class VendaControle {
 //        vendaRepositorio.delete(venda.get());
 //        return listar();
 //    }
+
+    @GetMapping("/removerVenda/{id}")
+    public ModelAndView remover(@PathVariable("id") Long id) {
+        Optional<Venda> venda = vendaRepositorio.findById(id);
+        if (venda.isPresent()) {
+            // Remover os itens da venda
+            List<ItemVenda> itensVenda = itemVendaRepositorio.buscarPorVenda(id);
+            for (ItemVenda item : itensVenda) {
+                // Atualizar o estoque dos produtos
+                Optional<Produto> produto = produtoRepositorio.findById(item.getProduto().getId());
+                if (produto.isPresent()) {
+                    Produto p = produto.get();
+                    p.setEstoque(p.getEstoque() + item.getQuantidade()); // Repor a quantidade de volta no estoque
+                    produtoRepositorio.saveAndFlush(p);
+                }
+                // Remover os itens da venda
+                itemVendaRepositorio.delete(item);
+            }
+
+            // Remover a venda
+            vendaRepositorio.delete(venda.get());
+        }
+
+        // Retornar à lista de vendas após a exclusão
+        return listar();
+    }
 
     public List<ItemVenda> getListaItemVenda() {
         return listaItemVenda;
