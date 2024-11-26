@@ -1,6 +1,7 @@
 package com.projeto.sistema.controller;
 
 
+import com.projeto.sistema.models.Empresa;
 import com.projeto.sistema.models.Venda;
 import com.projeto.sistema.models.ItemVenda;
 import com.projeto.sistema.models.Produto;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,10 @@ public class VendaControle {
 
     @Autowired // faz a conexao com ClienteRepositorio.
     private ClienteRepositorio clienteRepositorio;
+
+    @Autowired // faz a conexao com ClienteRepositorio.
+    private EmpresaRepositorio empresaRepositorio;
+
 
     private List<ItemVenda> listaItemVenda = new ArrayList<ItemVenda>();
     // essa linha superior cria uma lista temporaria dos itens para carregamento.
@@ -139,6 +145,16 @@ public class VendaControle {
 
         // Retornar à lista de vendas após a exclusão
         return listar();
+    }
+    @GetMapping("/imprimirVenda/{id}")
+    public ModelAndView imprimirVenda(@PathVariable("id") Long id) {
+        ModelAndView mv = new ModelAndView("administrativo/vendas/impressao");
+        Optional<Venda> venda = vendaRepositorio.findById(id);
+        if (venda.isPresent()) {
+            mv.addObject("venda", venda.get());
+            mv.addObject("itensVenda", itemVendaRepositorio.buscarPorVenda(id));
+        }
+        return mv;
     }
 
     public List<ItemVenda> getListaItemVenda() {

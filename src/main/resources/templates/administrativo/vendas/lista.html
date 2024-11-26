@@ -33,9 +33,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link active" href="/administrativo"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/administrativo"><i class="fa-solid fa-house"></i>
+                    Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-info-circle"></i> Sobre</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-address-book"></i> Contato</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-address-book"></i> Contato</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -62,16 +64,19 @@
             <td th:text="${venda.dataVenda}"></td>
             <td th:text="${venda.valorTotal}"></td>
             <td>
-                <a th:href="@{/editarVenda/{id}(id=${venda.id})}" class="text-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a th:href="@{/editarVenda/{id}(id=${venda.id})}" class="text-primary"><i
+                        class="fa-solid fa-pen-to-square"></i></a>
                 <a th:href="@{/removerVenda/{id}(id=${venda.id})}" class="text-danger"><i class="fa-solid fa-trash"></i></a>
+                <a th:href="@{/imprimirVenda/{id}(id=${venda.id})}" class="btn btn-secondary">
+                    <i class="fa fa-print"></i> Imprimir
+                </a>
             </td>
         </tr>
         </tbody>
     </table>
-    <div class="d-flex justify-content-between mt-3">
         <a class="btn btn-danger" href="/administrativo"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
         <a class="btn btn-primary" href="/cadastroVenda"><i class="fa-solid fa-address-card"></i> Cadastrar</a>
-    </div>
+
 </div>
 
 <!-- JavaScript -->

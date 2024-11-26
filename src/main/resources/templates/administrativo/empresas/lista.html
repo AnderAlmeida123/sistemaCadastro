@@ -19,13 +19,9 @@
             crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
 
-
-    <title>lista estados</title>
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></link>
-
+    <title>Lista de Empresas</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
@@ -33,7 +29,7 @@
         <a class="navbar-brand d-flex align-items-center" href="#">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr6yBc0QQ1CCxo4CnFnx2FS49M24saWf5u5g&s"
                  alt="Logo" width="40" height="40" class="rounded-circle">
-            <span class="ms-3 text-white font-weight-bold"> Lista de Estados </span>
+            <span class="ms-3 text-white font-weight-bold"> Lista de Empresas </span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Alternar navegação">
@@ -41,85 +37,68 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link active" href="/administrativo"><i class="fa-solid fa-house"></i>
-                    Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/administrativo"><i class="fa-solid fa-house"></i> Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-info-circle"></i> Sobre</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-address-book"></i> Contato</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-address-book"></i> Contato</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
 <div class="container mt-4">
-    <h1 class="text-center mb-4">Lista de Estados</h1>
+    <h1 class="text-center mb-4">Lista de Empresas</h1>
     <table class="table table-striped" id="tabela">
         <thead class="bg-primary text-white">
         <tr>
-            <td>Id</td>
-            <td>Nome</td>
-            <td>Sigla</td>
-            <td>Ação</td>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Endereço</th>
+            <th>Telefone</th>
+            <th>Ação</th>
         </tr>
         </thead>
-
         <tbody>
-        <tr th:each="estado: ${listaEstado}">
-            <td th:text="${estado.id}"></td>
-            <td th:text="${estado.nome}"></td>
-            <td th:text="${estado.sigla}"></td>
-            <td colspan="2">
-                <a th:href="@{/editarEstado/{id}(id=${estado.id})}" class="btn btn-sm btn-primary">
+        <tr th:each="empresa : ${listaEmpresas}">
+            <td th:text="${empresa.id}"></td>
+            <td th:text="${empresa.nome}"></td>
+            <td th:text="${empresa.cnpj}"></td>
+            <td th:text="${empresa.endereco}"></td>
+            <td th:text="${empresa.telefone}"></td>
+            <td>
+                <a th:href="@{/editarEmpresa/{id}(id=${empresa.id})}" class="btn btn-sm btn-primary">
                     <i class="fa-solid fa-pen-to-square"></i> Editar
                 </a>
-
-                <a th:href="@{/removerEstado/{id}(id=${estado.id})}" class="btn btn-sm btn-danger">
+                <a th:href="@{/removerEmpresa/{id}(id=${empresa.id})}" class="btn btn-sm btn-danger">
                     <i class="fa-solid fa-trash"></i> Excluir
                 </a>
             </td>
         </tr>
         </tbody>
-
     </table>
 
     <a class="btn btn-danger" href="/administrativo"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
-    <a class="btn btn-primary" href="/cadastroEstado"><i class="fa-solid fa-address-card" style="color: white"></i>
+    <a class="btn btn-primary" href="/cadastroEmpresa"><i class="fa-solid fa-address-card" style="color: white"></i>
         Cadastrar</a>
-
 </div>
 
 <!-- JavaScript (Opcional) -->
-<!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
-<script
-        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"
-></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"
-></script>
-<script
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"
-></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
-        integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+        crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-
-<script>$(document).ready(function () {
-    $('#tabela').DataTable();
-});
-var table = new DataTable('#tabela', {
-    language: {
-        url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/pt-BR.json',
-    },
-});
+<script>
+    $(document).ready(function () {
+        $('#tabela').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/pt-BR.json',
+            }
+        });
+    });
 </script>
 </body>
 </html>

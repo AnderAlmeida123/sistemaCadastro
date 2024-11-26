@@ -21,6 +21,10 @@ public class Venda implements Serializable {
     private Cliente cliente;
     @ManyToOne
     private Funcionario funcionario;
+//    @ManyToOne // Uma venda está associada a uma empresa
+//    @JoinColumn(name = "empresa_id", nullable = false)
+//    private Empresa empresa;
+
 
     public Long getId() {
         return id;
@@ -77,4 +81,5 @@ public class Venda implements Serializable {
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
     }
+
 }
