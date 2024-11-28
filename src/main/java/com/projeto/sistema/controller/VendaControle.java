@@ -106,6 +106,61 @@ public class VendaControle {
     }
 
 
+    @GetMapping("/editarItemVenda/{id}")
+    public ModelAndView editarItem(@PathVariable("id") Long id) {
+        Optional<ItemVenda> itemVenda = itemVendaRepositorio.findById(id);
+
+        ModelAndView mv = new ModelAndView("administrativo/vendas/itemVenda");
+        mv.addObject("itemVenda", itemVenda.orElse(new ItemVenda())); // Garantir que o objeto não seja nulo
+        mv.addObject("listaProdutos", produtoRepositorio.findAll()); // Adicionar a lista de produtos
+        mv.addObject("listaFuncionarios", funcionarioRepositorio.findAll()); // Adiciona a lista de funcionários
+        mv.addObject("listaClientes", clienteRepositorio.findAll()); // Adiciona a lista de clientes
+
+        return mv;
+    }
+
+
+
+//    @GetMapping("/editarItemVenda/{id}")
+//    public ModelAndView editarItem(@PathVariable("id") Long id) {
+//        Optional<ItemVenda> itemVenda = itemVendaRepositorio.findById(id);
+//
+//        ModelAndView mv = new ModelAndView("administrativo/vendas/itemVenda");
+//        mv.addObject("itemVenda", itemVenda);
+//
+//        return mv;
+//    }
+
+    @PostMapping("/atualizarItemVenda")
+    public ModelAndView atualizarItemVenda(ItemVenda itemVenda) {
+        System.out.println("ItemVenda ID: " + itemVenda.getId());
+        System.out.println("Produto: " + (itemVenda.getProduto() != null ? itemVenda.getProduto().getId() : "Produto nulo"));
+
+        if (itemVenda.getProduto() == null || itemVenda.getProduto().getId() == null) {
+            throw new IllegalArgumentException("Produto não pode ser nulo.");
+        }
+
+        Optional<ItemVenda> itemExistente = itemVendaRepositorio.findById(itemVenda.getId());
+        if (itemExistente.isPresent()) {
+            ItemVenda itemAtualizado = itemExistente.get();
+            itemAtualizado.setQuantidade(itemVenda.getQuantidade());
+            itemAtualizado.setValor(itemVenda.getValor());
+            itemAtualizado.setSubtotal(itemVenda.getQuantidade() * itemVenda.getValor());
+
+            Produto produto = produtoRepositorio.findById(itemVenda.getProduto().getId())
+                    .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+            itemAtualizado.setProduto(produto);
+
+            itemVendaRepositorio.saveAndFlush(itemAtualizado);
+        }
+
+        return listar(); // Retorna à página de lista com as alterações
+    }
+
+
+
+
+
     @GetMapping("/listarVenda")
     public ModelAndView listar() {
         ModelAndView mv = new ModelAndView("administrativo/vendas/lista");
@@ -146,6 +201,27 @@ public class VendaControle {
         // Retornar à lista de vendas após a exclusão
         return listar();
     }
+
+// esse remover item remove aquele item que esta na tela principal, logo apos que vc adiciona, antes de salvar e enviar para o db
+    
+    @GetMapping("/removerItemVenda/{id}")
+    public ModelAndView removerItem(@PathVariable("id") Long id) {
+        // Encontra o item da venda a ser removido pela ID
+        ItemVenda itemVenda = listaItemVenda.stream()
+                .filter(item -> item.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (itemVenda != null) {
+            // Remove o item da lista temporária
+            listaItemVenda.remove(itemVenda);
+        }
+
+        // Retorna à página de cadastro, com a lista atualizada
+        return cadastrar(new Venda(), new ItemVenda());
+    }
+
+
     @GetMapping("/imprimirVenda/{id}")
     public ModelAndView imprimirVenda(@PathVariable("id") Long id) {
         ModelAndView mv = new ModelAndView("administrativo/vendas/impressao");

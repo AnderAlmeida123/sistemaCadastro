@@ -113,11 +113,11 @@
                     <input type="text" readonly="true" class="form-control" id="id" th:field="*{id}"/>
 
 
-                    <label>Observação:</label>
-                    <input type="text" class="form-control" id="nome" th:field="*{obs}"/>
-                    <!--            required serve para preencher o campo e nao deixar vazio-->
+<!--                    <label>Observação:</label>-->
+<!--                    <input type="text" class="form-control" id="nome" th:field="*{obs}"/>-->
+<!--                    &lt;!&ndash;            required serve para preencher o campo e nao deixar vazio&ndash;&gt;-->
 
-                    <label>Funcionário:</label>
+                    <label>Vendedor:</label>
                     <select th:field="*{funcionario}" class="form-control">
                         <option th:each="est: ${listaFuncionarios}" th:value="${est.id}" th:text="${est.nome}"></option>
                         <!--            esse listaFuncionarios esta vindo la do VendaControle, na parte get cadastro-->

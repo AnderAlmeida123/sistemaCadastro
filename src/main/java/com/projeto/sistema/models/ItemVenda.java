@@ -19,6 +19,10 @@ public class ItemVenda implements Serializable {
     private Venda venda;
     @ManyToOne
     private Produto produto;
+    @ManyToOne
+    private Funcionario funcionario;
+    @ManyToOne
+    private Cliente cliente;
 
     public Long getId() {
         return id;
@@ -66,5 +70,21 @@ public class ItemVenda implements Serializable {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

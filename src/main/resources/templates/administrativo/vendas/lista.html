@@ -64,9 +64,14 @@
             <td th:text="${venda.dataVenda}"></td>
             <td th:text="${venda.valorTotal}"></td>
             <td>
-                <a th:href="@{/editarVenda/{id}(id=${venda.id})}" class="text-primary"><i
-                        class="fa-solid fa-pen-to-square"></i></a>
-                <a th:href="@{/removerVenda/{id}(id=${venda.id})}" class="text-danger"><i class="fa-solid fa-trash"></i></a>
+                <a th:href="@{/editarVenda/{id}(id=${venda.id})}" class="btn btn-sm btn-primary">
+                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                </a>
+
+                <a th:href="@{/removerVenda/{id}(id=${venda.id})}" class="btn btn-sm btn-danger">
+                    <i class="fa-solid fa-trash"></i> Excluir
+                </a>
+
                 <a th:href="@{/imprimirVenda/{id}(id=${venda.id})}" class="btn btn-secondary">
                     <i class="fa fa-print"></i> Imprimir
                 </a>

@@ -19,9 +19,10 @@ public class Entrada implements Serializable {
 
     @ManyToOne
     private Fornecedor fornecedor;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
-
+    
     public Long getId() {
         return id;
     }

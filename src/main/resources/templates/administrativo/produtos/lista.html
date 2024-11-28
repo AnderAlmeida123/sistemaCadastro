@@ -41,9 +41,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link active" href="/administrativo"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/administrativo"><i class="fa-solid fa-house"></i>
+                    Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-info-circle"></i> Sobre</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-address-book"></i> Contato</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-address-book"></i> Contato</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -79,10 +81,14 @@
             <td th:text="${produto.lucro}"></td>
             <td th:text="${produto.margemLucro}"></td>
             <td colspan="2">
-                <a th:href="@{/editarProduto/{id}(id=${produto.id})}"><i class="fa-solid fa-pen-to-square"
-                                                                       style="color: blue"></i></a>
-                <a th:href="@{/removerProduto/{id}(id=${produto.id})}"><i class="fa-solid fa-trash"
-                                                                        style="color: red;"></i></a>
+
+                <a th:href="@{/editarProduto/{id}(id=${produto.id})}" class="btn btn-sm btn-primary">
+                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                </a>
+
+                <a th:href="@{/removerProduto/{id}(id=${produto.id})}" class="btn btn-sm btn-danger">
+                    <i class="fa-solid fa-trash"></i> Excluir
+                </a>
             </td>
         </tr>
         </tbody>
@@ -139,7 +145,8 @@ var table = new DataTable('#tabela', {
             last: "Último",
             next: "Próximo",
             previous: "Anterior"
-        }}
+        }
+    }
 });
 </script>
 </body>
