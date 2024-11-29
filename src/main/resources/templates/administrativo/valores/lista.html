@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="https://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+<html
+        xmlns:th="https://thymeleaf.org"
+        xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+>
 <head>
     <!-- Meta tags Obrigatórias -->
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
     <!-- Bootstrap CSS -->
     <link
@@ -12,12 +18,14 @@
             integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
             crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css"/>
 
-    <title>Lista de Vendas</title>
+
+    <title>lista valors</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></link>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
@@ -25,7 +33,7 @@
         <a class="navbar-brand d-flex align-items-center" href="#">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr6yBc0QQ1CCxo4CnFnx2FS49M24saWf5u5g&s"
                  alt="Logo" width="40" height="40" class="rounded-circle">
-            <span class="ms-3 text-white font-weight-bold"> Lista de Vendas </span>
+            <span class="ms-3 text-white font-weight-bold"> Lista de Valors </span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Alternar navegação">
@@ -44,63 +52,68 @@
 </nav>
 
 <div class="container mt-4">
-    <h1 class="text-center mb-4">Lista de Vendas</h1>
+    <h1 class="text-center mb-4">Lista de Valores</h1>
     <table class="table table-striped" id="tabela">
         <thead class="bg-primary text-white">
         <tr>
-            <th>Id</th>
-            <th>Cliente</th>
-            <th>Vendedor</th>
-            <th>Data de Venda</th>
-            <th>Valor Total</th>
-            <th>Ação</th>
+            <td>Id</td>
+            <td>Produto</td>
+            <td>Valor de Entrada</td>
+            <td>Valor de Venda</td>
+            <td>Ação</td>
         </tr>
         </thead>
+
         <tbody>
-        <tr th:each="venda: ${listaVenda}">
-            <td th:text="${venda.id}"></td>
-            <td th:text="${venda.cliente.nome}"></td>
-            <td th:text="${venda.funcionario.nome}"></td>
-            <td th:text="${venda.dataVenda}"></td>
-            <td th:text="${venda.valorTotal}"></td>
-            <td>
-                <a th:href="@{/editarVenda/{id}(id=${venda.id})}" class="btn btn-sm btn-primary">
+        <tr th:each="valor: ${listaValor}">
+            <td th:text="${valor.id}"></td>
+            <td th:text="${valor.produto.nome}"></td>
+            <td th:text="${valor.entrada}"></td>
+            <td th:text="${valor.valorvenda}"></td>
+            <td colspan="2">
+                <a th:href="@{/editarValor/{id}(id=${valor.id})}" class="btn btn-sm btn-primary">
                     <i class="fa-solid fa-pen-to-square"></i> Editar
                 </a>
 
-                <a th:href="@{/removerVenda/{id}(id=${venda.id})}" class="btn btn-sm btn-danger">
+                <a th:href="@{/removerValor/{id}(id=${valor.id})}" class="btn btn-sm btn-danger">
                     <i class="fa-solid fa-trash"></i> Excluir
-                </a>
-
-                <a th:href="@{/imprimirVenda/{id}(id=${venda.id})}" class="btn btn-secondary">
-                    <i class="fa fa-print"></i> Imprimir
                 </a>
             </td>
         </tr>
         </tbody>
+
     </table>
-        <a class="btn btn-danger" href="/administrativo"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
-        <a class="btn btn-primary" href="/cadastroVenda"><i class="fa-solid fa-address-card"></i> Cadastrar</a>
+
+    <a class="btn btn-danger" href="/administrativo"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
+    <a class="btn btn-primary" href="/cadastroValor"><i class="fa-solid fa-address-card" style="color: white"></i>
+        Cadastrar</a>
 
 </div>
 
-<!-- JavaScript -->
+<!-- JavaScript (Opcional) -->
+<!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
 <script
         src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"
+></script>
 <script
         src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"
+></script>
 <script
         src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+        crossorigin="anonymous"
+></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+        integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
-<!--se o documento estiver apresentando as mensagem em ingles, adicionar esse script-->
 <script>$(document).ready(function () {
     $('#tabela').DataTable();
 });

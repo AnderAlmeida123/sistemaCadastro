@@ -289,3 +289,90 @@ Se precisar de mais detalhes ou dúvidas, só avisar!
 
 
 
+@PostMapping("/salvarVenda")
+public ModelAndView salvar(String acao, Venda venda, ItemVenda itemVenda, BindingResult result) {
+    if (result.hasErrors()) {
+        return cadastrar(venda, itemVenda);
+    }
+
+    if (acao.equals("itens")) {
+        // Busca o valor de venda na tabela Valor
+        Optional<Valor> valorOptional = valorRepositorio.findByProdutoId(itemVenda.getProduto().getId());
+        if (valorOptional.isPresent()) {
+            Valor valor = valorOptional.get();
+            itemVenda.setValor(valor.getValorvenda()); // Usa o preço de venda do produto
+            itemVenda.setSubtotal(itemVenda.getValor() * itemVenda.getQuantidade());
+
+            venda.setValorTotal(venda.getValorTotal() + itemVenda.getSubtotal());
+            venda.setQuantidadeTotal(venda.getQuantidadeTotal() + itemVenda.getQuantidade());
+
+            this.listaItemVenda.add(itemVenda);
+        } else {
+            // Caso não encontre o valor do produto
+            throw new RuntimeException("Valor de venda do produto não encontrado.");
+        }
+
+    } else if (acao.equals("salvar")) {
+        vendaRepositorio.saveAndFlush(venda);
+
+        for (ItemVenda it : listaItemVenda) {
+            it.setVenda(venda); // Relaciona o item com a venda
+            itemVendaRepositorio.saveAndFlush(it); // Salva o item
+
+            // Atualiza o estoque do produto
+            Optional<Produto> prod = produtoRepositorio.findById(it.getProduto().getId());
+            Produto produto = prod.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+            produto.setEstoque(produto.getEstoque() - it.getQuantidade());
+            produtoRepositorio.saveAndFlush(produto);
+
+            // Limpa a lista de itens de venda após salvar
+            this.listaItemVenda = new ArrayList<>();
+        }
+
+        return cadastrar(new Venda(), new ItemVenda());
+    }
+
+    return cadastrar(venda, new ItemVenda());
+}
+
+
+
+    @PostMapping("/salvarVenda")
+    public ModelAndView salvar(String acao, Venda venda, ItemVenda itemVenda, BindingResult result) {
+        if (result.hasErrors()) {
+            return cadastrar(venda, itemVenda);
+        }
+
+        if (acao.equals("itens")) {
+            itemVenda.setValor(itemVenda.getValor().get());
+            itemVenda.setSubtotal(itemVenda.getValor().get() * itemVenda.getQuantidade());
+
+            venda.setValorTotal(venda.getValorTotal() + (itemVenda.getValor() * itemVenda.getQuantidade()));
+            venda.setQuantidadeTotal(venda.getQuantidadeTotal() + itemVenda.getQuantidade());
+
+            this.listaItemVenda.add(itemVenda);
+
+        } else if (acao.equals("salvar")) {
+            vendaRepositorio.saveAndFlush(venda);
+
+            for (ItemVenda it : listaItemVenda) {
+                it.setVenda(venda);
+//                it.setSubtotal(it.getValor() * it.getQuantidade());
+                itemVendaRepositorio.saveAndFlush(it);
+
+                Optional<Produto> prod = produtoRepositorio.findById(it.getProduto().getId());
+                Produto produto = prod.get();
+                produto.setEstoque(produto.getEstoque() - it.getQuantidade());
+                produto.setPrecoVenda(it.getValor());
+//            produto.setPrecoCusto(it.getValorCusto());
+                produtoRepositorio.saveAndFlush(produto);
+
+                this.listaItemVenda = new ArrayList<>();
+
+
+            }
+            return cadastrar(new Venda(), new ItemVenda());
+
+        }
+        return cadastrar(venda, new ItemVenda());
+    }

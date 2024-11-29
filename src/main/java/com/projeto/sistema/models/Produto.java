@@ -12,14 +12,8 @@ public class Produto implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String nome;
-    private String codigoBarras;
-    private String unidadeMedida;
-    private Double estoque = 0.00;
-    private Double precoCusto = 0.00;
-    private Double precoVenda = 0.00;
-    private Double lucro = 0.00;
-    private Double margemLucro = 0.00;
-
+    private Double quantidade;
+    private String descricao;
 
     public Long getId() {
         return id;
@@ -37,59 +31,19 @@ public class Produto implements Serializable {
         this.nome = nome;
     }
 
-    public String getCodigoBarras() {
-        return codigoBarras;
+    public Double getQuantidade() {
+        return quantidade;
     }
 
-    public void setCodigoBarras(String codigoBarras) {
-        this.codigoBarras = codigoBarras;
+    public void setQuantidade(Double quantidade) {
+        this.quantidade = quantidade;
     }
 
-    public String getUnidadeMedida() {
-        return unidadeMedida;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setUnidadeMedida(String unidadeMedida) {
-        this.unidadeMedida = unidadeMedida;
-    }
-
-    public Double getEstoque() {
-        return estoque;
-    }
-
-    public void setEstoque(Double estoque) {
-        this.estoque = estoque;
-    }
-
-    public Double getPrecoCusto() {
-        return precoCusto;
-    }
-
-    public void setPrecoCusto(Double precoCusto) {
-        this.precoCusto = precoCusto;
-    }
-
-    public Double getPrecoVenda() {
-        return precoVenda;
-    }
-
-    public void setPrecoVenda(Double precoVenda) {
-        this.precoVenda = precoVenda;
-    }
-
-    public Double getLucro() {
-        return lucro;
-    }
-
-    public void setLucro(Double lucro) {
-        this.lucro = lucro;
-    }
-
-    public Double getMargemLucro() {
-        return margemLucro;
-    }
-
-    public void setMargemLucro(Double margemLucro) {
-        this.margemLucro = margemLucro;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

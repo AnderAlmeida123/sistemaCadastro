@@ -4,6 +4,7 @@ package com.projeto.sistema.controller;
 import com.projeto.sistema.models.Empresa;
 import com.projeto.sistema.models.Venda;
 import com.projeto.sistema.models.ItemVenda;
+import com.projeto.sistema.models.Valor;
 import com.projeto.sistema.models.Produto;
 import com.projeto.sistema.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class VendaControle {
     @Autowired // faz a conexao com ClienteRepositorio.
     private EmpresaRepositorio empresaRepositorio;
 
+    @Autowired
+    private ValorRepositorio valorRepositorio;
 
     private List<ItemVenda> listaItemVenda = new ArrayList<ItemVenda>();
     // essa linha superior cria uma lista temporaria dos itens para carregamento.
@@ -64,36 +67,40 @@ public class VendaControle {
         }
 
         if (acao.equals("itens")) {
-            itemVenda.setValor(itemVenda.getProduto().getPrecoVenda());
-            itemVenda.setSubtotal(itemVenda.getProduto().getPrecoVenda() * itemVenda.getQuantidade());
-
-            venda.setValorTotal(venda.getValorTotal() + (itemVenda.getValor() * itemVenda.getQuantidade()));
-            venda.setQuantidadeTotal(venda.getQuantidadeTotal() + itemVenda.getQuantidade());
-
-            this.listaItemVenda.add(itemVenda);
+            // Busca o valor de venda na tabela Valor
+            Optional<Valor> valorOptional = valorRepositorio.findByProdutoId(itemVenda.getProduto().getId());
+            if (valorOptional.isPresent()) {
+                Valor valor = valorOptional.get();
+                double valorVenda = (valor.getValorvenda() != null) ? valor.getValorvenda() : 0.0; // Valor padrão de 0.0
+                itemVenda.setValor(valorVenda);
+                itemVenda.setSubtotal(itemVenda.getValor() * itemVenda.getQuantidade());
+                venda.setValorTotal(venda.getValorTotal() + itemVenda.getSubtotal());
+                venda.setQuantidadeTotal(venda.getQuantidadeTotal() + itemVenda.getQuantidade());
+                this.listaItemVenda.add(itemVenda);
+            } else {
+                throw new RuntimeException("Valor de venda do produto não encontrado.");
+            }
 
         } else if (acao.equals("salvar")) {
             vendaRepositorio.saveAndFlush(venda);
 
             for (ItemVenda it : listaItemVenda) {
-                it.setVenda(venda);
-//                it.setSubtotal(it.getValor() * it.getQuantidade());
-                itemVendaRepositorio.saveAndFlush(it);
+                it.setVenda(venda); // Relaciona o item com a venda
+                itemVendaRepositorio.saveAndFlush(it); // Salva o item
 
+                // Atualiza o estoque do produto
                 Optional<Produto> prod = produtoRepositorio.findById(it.getProduto().getId());
-                Produto produto = prod.get();
-                produto.setEstoque(produto.getEstoque() - it.getQuantidade());
-                produto.setPrecoVenda(it.getValor());
-//            produto.setPrecoCusto(it.getValorCusto());
+                Produto produto = prod.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                produto.setQuantidade(produto.getQuantidade() - it.getQuantidade());
                 produtoRepositorio.saveAndFlush(produto);
 
+                // Limpa a lista de itens de venda após salvar
                 this.listaItemVenda = new ArrayList<>();
-
-
             }
-            return cadastrar(new Venda(), new ItemVenda());
 
+            return cadastrar(new Venda(), new ItemVenda());
         }
+
         return cadastrar(venda, new ItemVenda());
     }
 
@@ -119,17 +126,6 @@ public class VendaControle {
         return mv;
     }
 
-
-
-//    @GetMapping("/editarItemVenda/{id}")
-//    public ModelAndView editarItem(@PathVariable("id") Long id) {
-//        Optional<ItemVenda> itemVenda = itemVendaRepositorio.findById(id);
-//
-//        ModelAndView mv = new ModelAndView("administrativo/vendas/itemVenda");
-//        mv.addObject("itemVenda", itemVenda);
-//
-//        return mv;
-//    }
 
     @PostMapping("/atualizarItemVenda")
     public ModelAndView atualizarItemVenda(ItemVenda itemVenda) {
@@ -187,7 +183,7 @@ public class VendaControle {
                 Optional<Produto> produto = produtoRepositorio.findById(item.getProduto().getId());
                 if (produto.isPresent()) {
                     Produto p = produto.get();
-                    p.setEstoque(p.getEstoque() + item.getQuantidade()); // Repor a quantidade de volta no estoque
+                    p.setQuantidade(p.getQuantidade() + item.getQuantidade()); // Repor a quantidade de volta no estoque
                     produtoRepositorio.saveAndFlush(p);
                 }
                 // Remover os itens da venda
@@ -203,7 +199,7 @@ public class VendaControle {
     }
 
 // esse remover item remove aquele item que esta na tela principal, logo apos que vc adiciona, antes de salvar e enviar para o db
-    
+
     @GetMapping("/removerItemVenda/{id}")
     public ModelAndView removerItem(@PathVariable("id") Long id) {
         // Encontra o item da venda a ser removido pela ID
